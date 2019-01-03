@@ -3,8 +3,6 @@ extern crate regex;
 use regex::Regex;
 use rand::Rng;
 
-use crate::dice::DiceOptions;
-
 #[derive(Debug)]
 struct DiceSet {
   count: u8,
