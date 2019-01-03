@@ -1,0 +1,10 @@
+[package]
+name = "diceset"
+version = "0.1.0"
+authors = ["Aaron Tavistock <aaron@geekshow.com>"]
+edition = "2018"
+publish = false
+
+[dependencies]
+rand = "0.6"
+regex = "1.0"
