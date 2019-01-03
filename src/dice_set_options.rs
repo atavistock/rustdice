@@ -6,6 +6,8 @@ pub struct DiceSetOptions {
   pub explode: u8,
 }
 
+use crate::dietype::Dietype;
+
 #[allow(dead_code)]
 impl DiceSetOptions {
 
@@ -13,7 +15,7 @@ impl DiceSetOptions {
     DiceSetOptions { ..Default::default() }
   }
 
-  pub fn apply(&self, rolls: &mut Vec<u8>) {
+  pub fn apply(&self, dietype: &Dietype, rolls: &mut Vec<u8>) {
     if self.best > 0 {
       rolls.sort_unstable_by(|a, b| b.cmp(a));
       rolls.resize(self.best as usize, 0);
@@ -24,34 +26,16 @@ impl DiceSetOptions {
     }
     if self.reroll > 0 {
       for roll in rolls.iter_mut() {
-        println!("Roll? {}", *roll);
-        *roll = 3u8;
+         while *roll <= self.reroll {
+          *roll = dietype.roll();
+        }
       }
     }
+    // if self.explode != 0 {
+
+    // }
+
   }
-
-  // fn apply_reroll_option(&self, rolls)
-  //   for roll in rolls.iter_mut() {
-  //     while *roll < self.reroll {
-  //       roll = &mut self.roll_die();
-  //     }
-  //   }
-  // }
-
-  // fn apply_explode_option(&self, rolls: Vec<u8>) {
-  //   // Probably a more efficient way to do this.
-  //   let new_rolls = Vec::new();
-  //   for roll in rolls.iter() {
-  //     let new_roll = *roll;
-  //     new_rolls.push(new_roll);
-  //     while new_roll >= self.explode {
-  //       new_roll = self.roll_die();
-  //       new_rolls.push(new_roll);
-  //     }
-  //   }
-  //   rolls = new_rolls;
-  // }
-
 
 }
 

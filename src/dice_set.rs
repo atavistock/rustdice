@@ -60,7 +60,7 @@ impl DiceSet {
       rolls.push(value);
     }
 
-    self.options.apply(&mut rolls);
+    self.options.apply(&self.dietype, &mut rolls);
 
     let mut dice_total : i16 = 0;
     for roll in rolls.iter() {
