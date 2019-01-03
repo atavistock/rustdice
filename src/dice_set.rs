@@ -80,13 +80,13 @@ mod tests {
     assert_eq!(dice_set.adjustment, 0);
   }
 
-  // #[test]
-  // fn handles_bad_dice_string() {
-  //   let dice_set = DiceSet::new("1F36");
-  //   assert_eq!(dice_set.count, 0);
-  //   assert_eq!(dice_set.dietype, 0);
-  //   assert_eq!(dice_set.adjustment, 0);
-  // }
+  #[test]
+  fn handles_bad_dice_string() {
+    let dice_set = DiceSet::new("1F36");
+    assert_eq!(dice_set.count, 0);
+    assert_eq!(dice_set.dietype, 0);
+    assert_eq!(dice_set.adjustment, 0);
+  }
 
 
 
