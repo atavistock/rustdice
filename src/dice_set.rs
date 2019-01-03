@@ -3,10 +3,10 @@ extern crate regex;
 use regex::Regex;
 use rand::Rng;
 
- use crate::dice_options::DiceOptions;
+use crate::dice_options::DiceOptions;
 
 #[derive(Debug)]
-struct DiceSet {
+pub struct DiceSet {
   count: u8,
   dietype: u8,
   adjustment: i8,
@@ -48,28 +48,6 @@ impl DiceSet {
     }
   }
 
-  // pub fn best(&mut self, value: u8) {
-  //   self.best = value;
-  // }
-
-  // pub fn worst(&self, value: u8) {
-  //   if value < self.count {
-  //     self.worst = value;
-  //   }
-  // }
-
-  // pub fn reroll(&self, value: u8) {
-  //   if self.dietype - value > 1 {
-  //     self.reroll = value;
-  //   }
-  // }
-
-  // pub fn explode(&self, value: u8) {
-  //   if value > 2 {
-  //     self.explode = value;
-  //   }
-  // }
-
   pub fn roll(&self) -> i16 {
     let mut rolls: Vec<u8> = Vec::new();
     for _ in 0..self.count {
@@ -77,18 +55,7 @@ impl DiceSet {
       rolls.push(value);
     }
 
-    // if self.options.best > 0 {
-    //   self.apply_best_option(&mut rolls);
-    // }
-    // if self.worst > 0 {
-    //   self.apply_worst_option(rolls);
-    // }
-    // if self.reroll > 0 {
-    //   self.apply_reroll_option(rolls);
-    // }
-    // if self.explode != 0 {
-    //   self.apply_explode_option(rolls);
-    // }
+    self.options.apply(&mut rolls);
 
     let mut dice_total : i16 = 0;
     for roll in rolls.iter() {
@@ -103,38 +70,6 @@ impl DiceSet {
     let roll : u8 = rng.gen_range(0, self.dietype);
     roll + 1
   }
-
-  // fn apply_best_option(&self, rolls: &mut Vec<u8>) {
-  //   rolls.sort_unstable_by(|a, b| b.cmp(a));
-  //   rolls.resize(self.options.best as usize, 0);
-  // }
-
-  // fn apply_worst_option(&self, rolls: Vec<u8>) {
-  //   rolls.sort_unstable();
-  //   rolls.resize(self.worst as usize, 0);
-  // }
-
-  // fn apply_reroll_option(&self, rolls: Vec<u8>) {
-  //   for roll in rolls.iter_mut() {
-  //     while *roll < self.reroll {
-  //       roll = &mut self.roll_die();
-  //     }
-  //   }
-  // }
-
-  // fn apply_explode_option(&self, rolls: Vec<u8>) {
-  //   // Probably a more efficient way to do this.
-  //   let new_rolls = Vec::new();
-  //   for roll in rolls.iter() {
-  //     let new_roll = *roll;
-  //     new_rolls.push(new_roll);
-  //     while new_roll >= self.explode {
-  //       new_roll = self.roll_die();
-  //       new_rolls.push(new_roll);
-  //     }
-  //   }
-  //   rolls = new_rolls;
-  // }
 
 }
 
@@ -180,13 +115,5 @@ mod tests {
     let value = dice_set.roll();
     assert!(value >= 50 && value <= 100);
   }
-
-  //   #[test]
-  // fn best_option_applies_correctly() {
-  //   let dice_set = DiceSet::new("50D2").unwrap();
-  //   dice_set.best(2);
-  //   let value = dice_set.roll();
-  //   assert_eq!(value, 2);
-  // }
 
 }
