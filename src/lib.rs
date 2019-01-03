@@ -1,4 +1,5 @@
 #[macro_use] extern crate lazy_static;
 
-mod dice_options;
+mod dietype;
 mod dice_set;
+mod dice_set_options;
