@@ -3,6 +3,8 @@ extern crate regex;
 use regex::Regex;
 use rand::Rng;
 
+ use crate::dice_options::DiceOptions;
+
 #[derive(Debug)]
 struct DiceSet {
   count: u8,
@@ -15,7 +17,7 @@ struct DiceSet {
 impl DiceSet {
 
   pub fn new(dice_str: &str) -> Option<DiceSet> {
-    let options = DiceOptions { ..Default::default };
+    let options = DiceOptions::default();
     DiceSet::new_with_options(dice_str, options)
   }
 
