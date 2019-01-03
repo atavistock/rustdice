@@ -12,21 +12,20 @@ struct DiceSet {
 
 impl DiceSet {
 
-  pub fn new(dice_str: &str) -> DiceSet {
+  pub fn new(dice_str: &str) -> Option<DiceSet> {
     let regex = Regex::new(r"(?P<count>[0-9]+)D(?P<dietype>[0-9]+)(?P<adjustment>[+-][0-9]+)?").unwrap();
-    let captures = regex.captures(dice_str).unwrap();
-
-    let count = captures["count"].parse::<u8>().unwrap_or(0);
-    let dietype = captures["dietype"].parse::<u8>().unwrap_or(0);
-    let adjustment = match captures.name("adjustment") {
-      Some(matches) => matches.as_str().parse::<i8>().unwrap_or(0i8),
-      None => 0i8
-    };
-
-    DiceSet {
-      count: count,
-      dietype: dietype,
-      adjustment: adjustment
+    match regex.captures(dice_str) {
+      Some(captures) => {
+        let count = captures["count"].parse::<u8>().unwrap_or(0);
+        let dietype = captures["dietype"].parse::<u8>().unwrap_or(0);
+        let adjustment = match captures.name("adjustment") {
+          Some(matches) => matches.as_str().parse::<i8>().unwrap_or(0i8),
+          None => 0i8
+        };
+        let dice_set = DiceSet { count: count, dietype: dietype, adjustment: adjustment };
+        Some(dice_set)
+      },
+      None => None
     }
   }
 
@@ -66,7 +65,7 @@ mod tests {
 
   #[test]
   fn parses_dice_string_with_adjustment() {
-    let dice_set = DiceSet::new("3D6-2");
+    let dice_set = DiceSet::new("3D6-2").unwrap();
     assert_eq!(dice_set.count, 3);
     assert_eq!(dice_set.dietype, 6);
     assert_eq!(dice_set.adjustment, -2);
@@ -74,7 +73,7 @@ mod tests {
 
   #[test]
   fn parses_dice_string_without_adjustment() {
-    let dice_set = DiceSet::new("3D6");
+    let dice_set = DiceSet::new("3D6").unwrap();
     assert_eq!(dice_set.count, 3);
     assert_eq!(dice_set.dietype, 6);
     assert_eq!(dice_set.adjustment, 0);
@@ -82,12 +81,25 @@ mod tests {
 
   #[test]
   fn handles_bad_dice_string() {
-    let dice_set = DiceSet::new("1F36");
-    assert_eq!(dice_set.count, 0);
-    assert_eq!(dice_set.dietype, 0);
-    assert_eq!(dice_set.adjustment, 0);
+    let unparsable = DiceSet::new("1F36");
+    assert!(unparsable.is_none());
   }
 
+  // Would like to mock out the roll_die method for these tests for
+  // more predictable results
 
+  #[test]
+  fn die_roll_applies_adjustment() {
+    let dice_set = DiceSet::new("1D2+98").unwrap();
+    let value = dice_set.roll();
+    assert!(value >= 99 && value <= 100);
+  }
+
+  #[test]
+  fn die_rolls_correct_number_of_dice() {
+    let dice_set = DiceSet::new("50D2").unwrap();
+    let value = dice_set.roll();
+    assert!(value >= 50 && value <= 100);
+  }
 
 }
