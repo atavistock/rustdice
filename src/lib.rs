@@ -1,1 +1,3 @@
-mod dice_set;
+#[macro_use] extern crate lazy_static;
+
+mod dice;
