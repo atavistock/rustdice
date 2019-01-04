@@ -16,14 +16,27 @@ impl DiceSetOptions {
   }
 
   pub fn apply(&self, dietype: &Dietype, rolls: &mut Vec<u8>) {
+    self.apply_best_option(rolls);
+    self.apply_worst_option(rolls);
+    self.apply_reroll_option(&dietype, rolls);
+    self.apply_explode_option(&dietype, rolls);
+  }
+
+  fn apply_best_option(&self, rolls: &mut Vec<u8>) {
     if self.best > 0 && self.best < rolls.len() as u8 {
       rolls.sort_unstable_by(|a, b| b.cmp(a));
       rolls.resize(self.best as usize, 0);
     }
+  }
+
+  fn apply_worst_option(&self, rolls: &mut Vec<u8>) {
     if self.worst > 0 && self.worst < rolls.len() as u8 {
       rolls.sort_unstable();
       rolls.resize(self.worst as usize, 0);
     }
+  }
+
+  fn apply_reroll_option(&self, dietype: &Dietype, rolls: &mut Vec<u8>) {
     if self.reroll > 0 && self.reroll < dietype.sides {
       for roll in rolls.iter_mut() {
          while *roll <= self.reroll {
@@ -31,6 +44,9 @@ impl DiceSetOptions {
         }
       }
     }
+  }
+
+  fn apply_explode_option(&self, dietype: &Dietype, rolls: &mut Vec<u8>) {
     if self.explode != 0 && self.explode > 1 {
       let mut explode_limit = 20u8;
       let mut new_rolls: Vec<u8> = Vec::new();
@@ -59,8 +75,7 @@ mod tests {
   fn supports_best_options() {
     let options = DiceSetOptions { best: 3, ..Default::default() };
     let mut rolls = vec![3u8, 4, 5, 6];
-    let dietype = Dietype { sides: 6 };
-    options.apply(&dietype, &mut rolls);
+    options.apply_best_option(&mut rolls);
     assert_eq!(rolls, vec![6u8, 5, 4]);
   }
 
@@ -68,8 +83,7 @@ mod tests {
   fn supports_worst_options() {
     let options = DiceSetOptions { worst: 3, ..Default::default() };
     let mut rolls = vec![1u8, 2, 3, 4];
-    let dietype = Dietype { sides: 6 };
-    options.apply(&dietype, &mut rolls);
+    options.apply_worst_option(&mut rolls);
     assert_eq!(rolls, vec![1u8, 2, 3]);
   }
 
@@ -78,7 +92,7 @@ mod tests {
     let options = DiceSetOptions { reroll: 1, ..Default::default() };
     let mut rolls = vec![1u8, 2, 1, 2];
     let dietype = Dietype { sides: 2 };
-    options.apply(&dietype, &mut rolls);
+    options.apply_reroll_option(&dietype, &mut rolls);
     assert_eq!(rolls, vec![2u8, 2, 2, 2]);
   }
 
@@ -87,7 +101,7 @@ mod tests {
     let options = DiceSetOptions { explode: 10, ..Default::default() };
     let mut rolls = vec![10u8, 10];
     let dietype = Dietype { sides: 10 };
-    options.apply(&dietype, &mut rolls);
+    options.apply_explode_option(&dietype, &mut rolls);
     assert!(rolls.len() >= 4);
   }
 
