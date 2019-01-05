@@ -1,5 +1,5 @@
 [package]
-name = "diceset"
+name = "rustdice"
 version = "0.1.0"
 authors = ["Aaron Tavistock <aaron@geekshow.com>"]
 edition = "2018"
