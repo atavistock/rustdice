@@ -24,10 +24,11 @@ impl DiceSet {
   pub fn new_with_options(dice_str: &str, options: DiceSetOptions) -> Option<DiceSet> {
     lazy_static! {
       static ref REGEX: Regex = Regex::new(r"(?xi)
-        (?P<count>[0-9]+)D(?P<diesides>[0-9]+)
+        (?P<count>[1-9][0-9]*)D(?P<diesides>[1-9][0-9]*)
         (?P<adjustment>[+-][0-9]+)?
       ").unwrap();
     }
+
     match REGEX.captures(dice_str) {
       Some(captures) => {
         let count = captures["count"].parse::<u8>().unwrap_or(0);
@@ -86,15 +87,37 @@ mod tests {
 
   #[test]
   fn parses_dice_string_without_adjustment() {
-    let dice_set = DiceSet::new("3D6").unwrap();
+    let dice_set = DiceSet::new("3D12").unwrap();
     assert_eq!(dice_set.count, 3);
-    assert_eq!(dice_set.dietype.sides, 6);
+    assert_eq!(dice_set.dietype.sides, 12);
     assert_eq!(dice_set.adjustment, 0);
   }
 
   #[test]
-  fn handles_bad_dice_string() {
+  fn is_case_insensitive() {
+    let dice_set = DiceSet::new("3D12").unwrap();
+    assert_eq!(dice_set.count, 3);
+    assert_eq!(dice_set.dietype.sides, 12);
+    let dice_set = DiceSet::new("3d12").unwrap();
+    assert_eq!(dice_set.count, 3);
+    assert_eq!(dice_set.dietype.sides, 12);
+  }
+
+  #[test]
+  fn handles_invalid_letter_with_none() {
     let unparsable = DiceSet::new("1F36");
+    assert!(unparsable.is_none());
+  }
+
+  #[test]
+  fn handles_invalid_count_with_none()  {
+    let unparsable = DiceSet::new("00D20");
+    assert!(unparsable.is_none());
+  }
+
+  #[test]
+  fn handles_invalid_dietype_with_none()  {
+    let unparsable = DiceSet::new("3D00");
     assert!(unparsable.is_none());
   }
 
