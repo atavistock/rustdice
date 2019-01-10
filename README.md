@@ -11,7 +11,7 @@ In the simplest case simply call the Dice.roll with:
 
 ## Options
 
-A number of options are supported to allow common use cases supported by different game systems using the `DiceSetOption` struct.
+A number of options are supported to allow common use cases supported by different game systems using the `DiceSetOption` struct and the `new_with_options` method.
 
 __best__
 
@@ -19,7 +19,7 @@ Take the best _n_ dice from the dice rolled
 
 ```rust
   let dice_options = DiceSetOptions::new(best: 3);
-  let dice = Rustdice::new("4D6", dice_options);
+  let dice = Rustdice::new_with_options("4D6", dice_options);
   let result = dice.roll();
 ```
 
@@ -29,7 +29,7 @@ Take the worst _n_ dice from the dice rolled
 
 ```rust
   let dice_options = DiceSetOptions::new(worst: 3);
-  let dice = Rustdice::new("4d10", dice_options);
+  let dice = Rustdice::new_with_options("4d10", dice_options);
   let result = dice.roll();
 ```
 
@@ -39,7 +39,7 @@ Reroll any dice with a value of _n_
 
 ```rust
   let dice_options = DiceSetOptions::new(reroll: 1);
-  let dice = Rustdice::new("1d20", dice_options);
+  let dice = Rustdice::new_with_options("1d20", dice_options);
   let result = dice.roll();
 ```
 
@@ -49,7 +49,7 @@ Any dice with this value get an accumulating reroll found in a few game systems.
 
 ```rust
   let dice_options = DiceSetOptions::new(explode: 10);
-  let dice = Rustdice::new("3D10", dice_options);
+  let dice = Rustdice::new_with_options("3D10", dice_options);
   let result = dice.roll();
 ```
 
