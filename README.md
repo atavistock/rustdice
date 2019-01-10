@@ -57,4 +57,4 @@ Any dice with this value get an accumulating reroll found in a few game systems.
 
 Some people may find this library useful for their Rust projects and they're welcome to use it as such.
 
-Thoguh one reason I am undertaking this project is to experiment with Ruby/Rust bridging.  The intention is to replicate the functionality provided by [Rubydice](https://github.com/atavistock/rubydice) and then validate the ruby/rust proof of concept and to measure the impact of bridging between ruby and rust.
+My larger purpose for this project is to experiment with Ruby-to-Rust bridging.  The intention is to replicate the functionality provided by [Rubydice](https://github.com/atavistock/rubydice) and then validate and to measure the perfomance benefits or bottlenecks from bridging between ruby and rust.
