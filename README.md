@@ -6,7 +6,7 @@ In the simplest case simply call the Dice.roll with:
 
 ```rust
  let dice = Rustdice::new("3d6+1");
- let result = dice.roll;
+ let result = dice.roll();
 ```
 
 ## Options
