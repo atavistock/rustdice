@@ -13,9 +13,9 @@ In the simplest case simply call the Dice.roll with:
 
 A number of options are supported to allow common use cases supported by different game systems using the `DiceSetOption` struct.
 
-_best_
+__best__
 
-Take the best n dice from the dice rolled
+Take the best _n_ dice from the dice rolled
 
 ```rust
   let dice_options = DiceSetOptions::new(best: 3);
@@ -23,9 +23,9 @@ Take the best n dice from the dice rolled
   let result = dice.roll();
 ```
 
-_worst_
+__worst__
 
-Take the worst n dice from the dice rolled
+Take the worst _n_ dice from the dice rolled
 
 ```rust
   let dice_options = DiceSetOptions::new(worst: 3);
@@ -33,9 +33,9 @@ Take the worst n dice from the dice rolled
   let result = dice.roll();
 ```
 
-_reroll_
+__reroll__
 
-Reroll any dice with a value of 1
+Reroll any dice with a value of _n_
 
 ```rust
   let dice_options = DiceSetOptions::new(reroll: 1);
@@ -43,9 +43,9 @@ Reroll any dice with a value of 1
   let result = dice.roll();
 ```
 
-_explode_
+__explode__
 
-Any dice with this value get an accumulating reroll
+Any dice with this value get an accumulating reroll found in a few game systems.
 
 ```rust
   let dice_options = DiceSetOptions::new(explode: 10);
